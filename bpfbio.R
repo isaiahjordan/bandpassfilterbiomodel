@@ -1,11 +1,12 @@
 library(deSolve)
 library(lme4)
 #ampicillin concentration and position
+outt<-(NA)
 ampconc <- seq(0, 1, by = 0.01)
 ampco <- rev((exp(ampconc) / 2.72))
-getmax = function(x) {
+getmax = for(a in ampco) {
   parameters = c(
-    ampc = 1,
+    ampc = a,
     trate = 1.5,
     degtc = 1,
     synrate = 1.5
@@ -27,14 +28,13 @@ getmax = function(x) {
       times = seq(1, 50),
       func = tetconc,
       parms = parameters,
-      #method = "lsoda"
+      method = "lsoda"
     ))
-  #return(c(amp = a, tet = max(out$tet)))
-  max(out$tet)
+  maxt<-c(a,max(out$tet))
+  outt<-rbind(outt,maxt) 
 }
 
 #results <- as.data.frame(ampco, lapply(ampco, getmax))
 #head(results)
 #plot(x = results$amp, y = results$tet)
 #curve(getmax, from = 1, to = 2, n = 101)
-curve(getmax, -pi, 2*pi)
