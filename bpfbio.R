@@ -3,9 +3,9 @@ library(lme4)
 #ampicillin concentration and position
 ampconc <- seq(0, 1, by = 0.01)
 ampco <- rev((exp(ampconc) / 2.72))
-getmax = function(a) {
+getmax = function(x) {
   parameters = c(
-    ampc = a,
+    ampc = 1,
     trate = 1.5,
     degtc = 1,
     synrate = 1.5
@@ -29,7 +29,12 @@ getmax = function(a) {
       parms = parameters,
       #method = "lsoda"
     ))
-  return(c(a, max(out$tet)))
+  #return(c(amp = a, tet = max(out$tet)))
+  max(out$tet)
 }
 
-head(lapply(ampco, getmax))
+#results <- as.data.frame(ampco, lapply(ampco, getmax))
+#head(results)
+#plot(x = results$amp, y = results$tet)
+#curve(getmax, from = 1, to = 2, n = 101)
+curve(getmax, -pi, 2*pi)
