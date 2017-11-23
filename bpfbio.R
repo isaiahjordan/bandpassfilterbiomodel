@@ -1,7 +1,8 @@
 library(deSolve)
 library(lme4)
+library(dplyr)
 #ampicillin concentration and position
-outt<-(NA)
+outt<-NULL
 ampconc <- seq(0, 1, by = 0.01)
 ampco <- rev((exp(ampconc) / 2.72))
 getmax = for(a in ampco) {
@@ -31,10 +32,13 @@ getmax = for(a in ampco) {
       method = "lsoda"
     ))
   maxt<-c(a,max(out$tet))
-  outt<-rbind(outt,maxt) 
+  outt<-as.data.frame(rbind(outt,maxt))
 }
-
+names(outt)<-c("a","t")
+survive<-filter(outt, outt$a < 0.8, outt$t<1)
 #results <- as.data.frame(ampco, lapply(ampco, getmax))
 #head(results)
 #plot(x = results$amp, y = results$tet)
 #curve(getmax, from = 1, to = 2, n = 101)
+plot(outt)
+points()
